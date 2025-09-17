@@ -28,19 +28,19 @@ const AddOnItem = ({ name, price, onQuantityChange }) => {
   };
 
   return (
-    <View style={styles.addOnItem}>
-      <Text style={styles.addOnName}>{name}</Text>
-      <View style={styles.addOnRight}>
+    <View style={styles.addOnCard}>
+      <View>
+        <Text style={styles.addOnName}>{name}</Text>
         <Text style={styles.addOnPrice}>Ksh {price}</Text>
-        <View style={styles.quantityControl}>
-          <TouchableOpacity onPress={handleDecrease} style={styles.quantityButton}>
-            <Text style={styles.quantityText}>-</Text>
-          </TouchableOpacity>
-          <Text style={styles.quantityCount}>{quantity}</Text>
-          <TouchableOpacity onPress={handleIncrease} style={styles.quantityButton}>
-            <Text style={styles.quantityText}>+</Text>
-          </TouchableOpacity>
-        </View>
+      </View>
+      <View style={styles.quantityControl}>
+        <TouchableOpacity onPress={handleDecrease} style={styles.quantityButton}>
+          <Text style={styles.quantityText}>-</Text>
+        </TouchableOpacity>
+        <Text style={styles.quantityCount}>{quantity}</Text>
+        <TouchableOpacity onPress={handleIncrease} style={styles.quantityButton}>
+          <Text style={styles.quantityText}>+</Text>
+        </TouchableOpacity>
       </View>
     </View>
   );
@@ -50,7 +50,6 @@ const DishDetailScreen = () => {
   const router = useRouter();
   const { dish } = useLocalSearchParams();
 
-  // Parse the dish param back into an object
   const parsedDish = dish ? JSON.parse(dish as string) : null;
 
   const [mainDishQuantity, setMainDishQuantity] = useState(1);
@@ -78,17 +77,27 @@ const DishDetailScreen = () => {
     <SafeAreaView style={styles.safeArea}>
       <StatusBar barStyle="dark-content" backgroundColor="#fff" />
       <View style={styles.container}>
-        {/* Header */}
+        {/* Header with back + cart */}
         <View style={styles.header}>
-          <TouchableOpacity onPress={() => router.back()}>
-            <Text style={styles.headerIcon}>←</Text>
-          </TouchableOpacity>
+          <TouchableOpacity
+  onPress={() => {
+    if (router.canGoBack()) {
+      router.back();
+    } else {
+      router.replace("(tabs)"); // fallback to home screen
+    }
+  }}
+  style={styles.headerBtn}
+>
+  <Text style={styles.headerIcon}>←</Text>
+</TouchableOpacity>
+
           <Image
-            source={require("../../assets/licky-fish-logo.jpg")}
+            source={require("../assets/licky-fish-logo.jpg")}
             style={styles.logo}
           />
-          <TouchableOpacity>
-            <Text style={styles.headerIcon}>🛍️</Text>
+          <TouchableOpacity style={styles.headerBtn}>
+            <Text style={styles.headerIcon}>🛒</Text>
           </TouchableOpacity>
         </View>
 
@@ -100,10 +109,12 @@ const DishDetailScreen = () => {
             )}
           </View>
 
-          {/* Details */}
-          <View style={styles.detailsContainer}>
+          {/* Dish Info */}
+          <View style={styles.detailsCard}>
             <Text style={styles.productName}>{parsedDish?.name}</Text>
-            <Text style={styles.productDescription}>{parsedDish?.description}</Text>
+            <Text style={styles.productDescription}>
+              {parsedDish?.description}
+            </Text>
 
             <View style={styles.deliveryInfo}>
               <Text style={styles.deliveryIcon}>🚚</Text>
@@ -111,12 +122,26 @@ const DishDetailScreen = () => {
                 Delivery Time <Text style={styles.deliveryTime}>20 minutes</Text>
               </Text>
             </View>
+          </View>
 
-            {/* Add-ons */}
-            <Text style={styles.addOnsTitle}>Add</Text>
-            <AddOnItem name="Ugali" price={50} onQuantityChange={onAddOnQuantityChange} />
-            <AddOnItem name="Kachumbari" price={50} onQuantityChange={onAddOnQuantityChange} />
-            <AddOnItem name="SukumaWiki" price={50} onQuantityChange={onAddOnQuantityChange} />
+          {/* Add-ons */}
+          <View style={styles.addOnsContainer}>
+            <Text style={styles.addOnsTitle}>Make it better</Text>
+            <AddOnItem
+              name="Ugali"
+              price={50}
+              onQuantityChange={onAddOnQuantityChange}
+            />
+            <AddOnItem
+              name="Kachumbari"
+              price={50}
+              onQuantityChange={onAddOnQuantityChange}
+            />
+            <AddOnItem
+              name="SukumaWiki"
+              price={50}
+              onQuantityChange={onAddOnQuantityChange}
+            />
           </View>
         </ScrollView>
 
@@ -138,7 +163,9 @@ const DishDetailScreen = () => {
             </TouchableOpacity>
           </View>
           <TouchableOpacity style={styles.addButton}>
-            <Text style={styles.addButtonText}>Add for Ksh {calculateTotalPrice()}</Text>
+            <Text style={styles.addButtonText}>
+              Add for Ksh {calculateTotalPrice()}
+            </Text>
           </TouchableOpacity>
         </View>
       </View>
@@ -148,7 +175,6 @@ const DishDetailScreen = () => {
 
 export default DishDetailScreen;
 
-// --- Styles ---
 const styles = StyleSheet.create({
   safeArea: { flex: 1, backgroundColor: "#fff" },
   container: { flex: 1, backgroundColor: "#fff" },
@@ -157,57 +183,82 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-    paddingHorizontal: 20,
-    paddingVertical: 15,
-    backgroundColor: "#fff",
+    paddingHorizontal: 15,
+    paddingVertical: 12,
   },
-  headerIcon: { fontSize: 24, color: "#333" },
-  logo: { width: 100, height: 40, resizeMode: "contain" },
+  headerBtn: {
+    backgroundColor: "#f2f2f2",
+    padding: 8,
+    borderRadius: 30,
+  },
+  headerIcon: { fontSize: 18, fontWeight: "600", color: "#333" },
+  logo: { width: 90, height: 35, resizeMode: "contain" },
 
-  imageContainer: { width: "100%", height: 250, position: "relative" },
+  imageContainer: { width: "100%", height: 280 },
   productImage: {
     width: "100%",
     height: "100%",
     resizeMode: "cover",
-    borderBottomLeftRadius: 30,
-    borderBottomRightRadius: 30,
+    borderBottomLeftRadius: 20,
+    borderBottomRightRadius: 20,
   },
 
-  detailsContainer: { padding: 20 },
-  productName: { fontSize: 28, fontWeight: "bold", color: "#222", marginBottom: 10 },
-  productDescription: { fontSize: 16, color: "#666", lineHeight: 22, marginBottom: 20 },
-  deliveryInfo: { flexDirection: "row", alignItems: "center", marginBottom: 20 },
-  deliveryIcon: { fontSize: 20, marginRight: 10 },
-  deliveryText: { fontSize: 16, color: "#444" },
+  detailsCard: {
+    padding: 20,
+    backgroundColor: "#fff",
+  },
+  productName: { fontSize: 26, fontWeight: "bold", color: "#222" },
+  productDescription: {
+    fontSize: 15,
+    color: "#666",
+    lineHeight: 22,
+    marginVertical: 10,
+  },
+  deliveryInfo: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginTop: 5,
+  },
+  deliveryIcon: { fontSize: 18, marginRight: 6 },
+  deliveryText: { fontSize: 14, color: "#444" },
   deliveryTime: { fontWeight: "bold" },
-  addOnsTitle: { fontSize: 20, fontWeight: "bold", color: "#222", marginBottom: 10 },
 
-  addOnItem: {
+  addOnsContainer: { paddingHorizontal: 20, marginTop: 10 },
+  addOnsTitle: {
+    fontSize: 18,
+    fontWeight: "bold",
+    marginBottom: 10,
+    color: "#222",
+  },
+  addOnCard: {
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-    paddingVertical: 12,
-    borderBottomWidth: 1,
-    borderBottomColor: "#eee",
+    backgroundColor: "#f9f9f9",
+    padding: 15,
+    borderRadius: 12,
+    marginBottom: 10,
   },
-  addOnName: { fontSize: 16, color: "#333" },
-  addOnRight: { flexDirection: "row", alignItems: "center" },
-  addOnPrice: { fontSize: 16, color: "#333", marginRight: 15 },
+  addOnName: { fontSize: 16, fontWeight: "600", color: "#333" },
+  addOnPrice: { fontSize: 14, color: "#888", marginTop: 4 },
+
   quantityControl: {
     flexDirection: "row",
     alignItems: "center",
-    backgroundColor: "#f2f2f2",
+    backgroundColor: "#fff",
     borderRadius: 20,
+    borderWidth: 1,
+    borderColor: "#ddd",
   },
   quantityButton: { paddingHorizontal: 10, paddingVertical: 5 },
   quantityText: { fontSize: 18, fontWeight: "bold", color: "#333" },
-  quantityCount: { fontSize: 16, paddingHorizontal: 10, color: "#333" },
+  quantityCount: { fontSize: 16, paddingHorizontal: 8, color: "#333" },
 
   footer: {
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-    padding: 20,
+    padding: 15,
     borderTopWidth: 1,
     borderTopColor: "#eee",
     backgroundColor: "#fff",
@@ -223,7 +274,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#267A8A",
     borderRadius: 30,
     paddingVertical: 15,
-    paddingHorizontal: 30,
+    paddingHorizontal: 25,
   },
   addButtonText: { color: "#fff", fontWeight: "bold", fontSize: 16 },
 });

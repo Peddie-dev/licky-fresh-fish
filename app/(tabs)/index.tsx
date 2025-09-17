@@ -1,6 +1,6 @@
-import { Ionicons } from '@expo/vector-icons';
-import { useRouter } from 'expo-router'; // Use useRouter from expo-router
-import React, { useEffect, useState } from 'react';
+import { Ionicons } from "@expo/vector-icons";
+import { useRouter } from "expo-router";
+import React, { useEffect, useState } from "react";
 import {
   FlatList,
   Image,
@@ -11,9 +11,8 @@ import {
   Text,
   TouchableOpacity,
   View,
-} from 'react-native';
+} from "react-native";
 
-// Type definition for dishes
 type Dish = {
   id: string;
   name: string;
@@ -42,40 +41,14 @@ const dishes: Dish[] = [
     price: 450,
     category: "Lunch",
   },
-  {
-    id: "3",
-    name: "Fish with Ugali",
-    description:
-      "A classic Kenyan dish featuring a whole fish prepared your way, served with a generous portion of ugali.",
-    image: require("../../assets/friedfish.jpeg"),
-    price: 350,
-    category: "Accompaniments",
-  },
-  {
-    id: "4",
-    name: "Fish with Chips",
-    description:
-      "Golden fried fish served with crispy chips, a perfect meal for a quick bite.",
-    image: require("../../assets/Wet Fry.jpeg"),
-    price: 450,
-    category: "Accompaniments",
-  },
 ];
 
-const categories = [
-  "All",
-  "Breakfast",
-  "Lunch",
-  "Soft Drinks",
-  "Alcohol",
-  "Accompaniments",
-];
+const categories = ["All", "Breakfast", "Lunch", "Soft Drinks"];
 
 const HomeScreen: React.FC = () => {
   const [selectedCategory, setSelectedCategory] = useState("All");
   const [filteredDishes, setFilteredDishes] = useState(dishes);
 
-  // Use the useRouter hook for Expo Router navigation
   const router = useRouter();
 
   useEffect(() => {
@@ -156,17 +129,16 @@ const HomeScreen: React.FC = () => {
           </ScrollView>
 
           {/* Specials */}
-          <Text style={styles.sectionTitle}>This Week's Specials!</Text>
+          <Text style={styles.sectionTitle}>This Week’s Specials!</Text>
           <FlatList
             data={filteredDishes}
             keyExtractor={(item) => item.id}
             renderItem={({ item }) => (
               <TouchableOpacity
                 style={styles.card}
-                // Use router.push() to navigate and pass data
                 onPress={() =>
                   router.push({
-                    pathname: 'DishDetail',
+                    pathname: "DishDetail",
                     params: { dish: JSON.stringify(item) },
                   })
                 }
@@ -191,13 +163,9 @@ const HomeScreen: React.FC = () => {
 export default HomeScreen;
 
 const styles = StyleSheet.create({
-  safeArea: {
-    flex: 1,
-    backgroundColor: "#fff",
-  },
-  scrollContent: {
-    paddingBottom: 20,
-  },
+  safeArea: { flex: 1, backgroundColor: "#fff" },
+  scrollContent: { paddingBottom: 20 },
+
   header: {
     flexDirection: "row",
     justifyContent: "space-between",
@@ -206,108 +174,68 @@ const styles = StyleSheet.create({
     paddingVertical: 15,
     backgroundColor: "#fff",
   },
-  logo: {
-    width: 100,
-    height: 40,
-    resizeMode: "contain",
-  },
+  logo: { width: 100, height: 40, resizeMode: "contain" },
+
   promoContainer: {
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-    backgroundColor: "#267A8A",
+    backgroundColor: "#44CED0",
     padding: 20,
+    borderRadius: 12,
+    marginHorizontal: 20,
+    marginBottom: 20,
   },
-  promoTextContainer: {
-    flex: 1,
-    paddingRight: 15,
-  },
-  promoTitle: {
-    fontSize: 36,
-    fontWeight: "bold",
-    color: "#fff",
-  },
-  promoSubtitle: {
-    fontSize: 24,
-    color: "#fff",
-    marginBottom: 10,
-  },
-  promoDescription: {
-    fontSize: 14,
-    color: "#fff",
-    lineHeight: 20,
-  },
-  promoImage: {
-    width: 120,
-    height: 120,
-    borderRadius: 8,
-  },
-  mainContent: {
-    paddingHorizontal: 20,
-  },
+  promoTextContainer: { flex: 1, paddingRight: 15 },
+  promoTitle: { fontSize: 28, fontWeight: "bold", color: "#000" },
+  promoSubtitle: { fontSize: 20, fontWeight: "600", color: "#000" },
+  promoDescription: { fontSize: 14, color: "#000", lineHeight: 20 },
+  promoImage: { width: 100, height: 100, borderRadius: 8 },
+
+  mainContent: { paddingHorizontal: 20 },
   sectionTitle: {
-    fontSize: 18,
+    fontSize: 16,
     fontWeight: "bold",
-    color: "#333",
+    color: "#000",
     marginBottom: 10,
     marginTop: 15,
   },
+
   buttonContainer: {
     flexDirection: "row",
-    marginBottom: 20,
+    paddingVertical: 5,
   },
   deliveryButton: {
     backgroundColor: "#C0C0C0",
-    borderRadius: 8,
-    paddingVertical: 12,
-    paddingHorizontal: 20,
-    marginHorizontal: 5,
+    borderRadius: 20,
+    paddingVertical: 10,
+    paddingHorizontal: 18,
+    marginRight: 10,
     alignItems: "center",
   },
-  selectedButton: {
-    backgroundColor: "#267A8A",
-  },
-  buttonText: {
-    color: "#444",
-    fontWeight: "bold",
-  },
+  selectedButton: { backgroundColor: "#267A8A" },
+  buttonText: { color: "#000", fontWeight: "bold" },
+
   list: {},
   card: {
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-    backgroundColor: "#f8f8f8",
-    borderRadius: 12,
-    padding: 12,
+    backgroundColor: "#fff",
+    borderRadius: 10,
+    padding: 14,
     marginBottom: 15,
-    elevation: 2,
+    borderWidth: 1,
+    borderColor: "#eee",
     shadowColor: "#000",
+    shadowOpacity: 0.05,
     shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
+    shadowRadius: 5,
+    elevation: 2,
   },
-  image: {
-    width: 100,
-    height: 100,
-    borderRadius: 8,
-  },
-  textContainer: {
-    flex: 1,
-    paddingRight: 12,
-  },
-  name: {
-    fontSize: 16,
-    fontWeight: "bold",
-  },
-  description: {
-    fontSize: 12,
-    color: "#666",
-    marginTop: 4,
-  },
-  price: {
-    fontSize: 16,
-    fontWeight: "bold",
-    color: "#333",
-    marginTop: 8,
-  },
+  image: { width: 90, height: 90, borderRadius: 8 },
+  textContainer: { flex: 1, paddingRight: 12 },
+  name: { fontSize: 16, fontWeight: "bold", color: "#000" },
+  description: { fontSize: 12, color: "#555", marginTop: 4 },
+  price: { fontSize: 14, fontWeight: "bold", color: "#000", marginTop: 6 },
 });

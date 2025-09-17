@@ -1,10 +1,11 @@
-// RootLayout.tsx
+// app/_layout.tsx
 import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native';
 import { useFonts } from 'expo-font';
 import { Stack } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import 'react-native-reanimated';
 
+import { CartProvider } from '@/app/context/CartContext'; // ✅ cleaned path for context
 import { useColorScheme } from '@/hooks/useColorScheme';
 
 export default function RootLayout() {
@@ -18,18 +19,23 @@ export default function RootLayout() {
   }
 
   return (
-    <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-      <Stack>
-        {/* This screen is for the tab bar navigator, and it will link to the _layout.tsx inside the (tabs) folder */}
-        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-        
-        {/* This screen is for the DishDetail page. It will be pushed on top of the tabs when you navigate to it */}
-        <Stack.Screen name="DishDetail" options={{ headerShown: false }} />
-        
-        {/* The +not-found screen is a fallback for invalid routes */}
-        <Stack.Screen name="+not-found" />
-      </Stack>
-      <StatusBar style="auto" />
-    </ThemeProvider>
+    <CartProvider> {/* ✅ Cart context available app-wide */}
+      <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
+        <Stack>
+          {/* Tabs layout */}
+          <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+
+          {/* Dish details screen */}
+          <Stack.Screen name="DishDetail" options={{ headerShown: false }} />
+
+          {/* Checkout screen */}
+          <Stack.Screen name="Checkout" options={{ headerShown: false }} />
+
+          {/* Not found */}
+          <Stack.Screen name="+not-found" />
+        </Stack>
+        <StatusBar style="auto" />
+      </ThemeProvider>
+    </CartProvider>
   );
 }

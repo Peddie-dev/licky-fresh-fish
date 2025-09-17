@@ -1,25 +1,21 @@
-// Correct layout.tsx for Expo Router
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import React from 'react';
+// app/_layout.tsx
+import { Stack } from "expo-router";
+import { StatusBar } from "expo-status-bar";
 
-import DishDetailScreen from '../screens/DishDetail';
-import HomeScreen from './index';
-
-const Stack = createNativeStackNavigator();
-
-export default function Layout() {
+export default function RootLayout() {
   return (
-    <Stack.Navigator initialRouteName="Home">
-      <Stack.Screen
-        name="Home"
-        component={HomeScreen}
-        options={{ headerShown: false }}
-      />
-      <Stack.Screen
-        name="DishDetail"
-        component={DishDetailScreen}
-        options={{ headerShown: false }}
-      />
-    </Stack.Navigator>
+    <>
+      <Stack>
+        {/* Home screen */}
+        <Stack.Screen name="index" options={{ headerShown: false }} />
+
+        {/* Dish detail screen (dynamic [id].tsx handles all dishes) */}
+        <Stack.Screen name="dish/[id]" options={{ headerShown: false }} />
+
+        {/* Checkout screen */}
+        <Stack.Screen name="checkout" options={{ headerShown: false }} />
+      </Stack>
+      <StatusBar style="auto" />
+    </>
   );
 }
