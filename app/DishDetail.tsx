@@ -80,17 +80,17 @@ const DishDetailScreen = () => {
         {/* Header with back + cart */}
         <View style={styles.header}>
           <TouchableOpacity
-  onPress={() => {
-    if (router.canGoBack()) {
-      router.back();
-    } else {
-      router.replace("(tabs)"); // fallback to home screen
-    }
-  }}
-  style={styles.headerBtn}
->
-  <Text style={styles.headerIcon}>←</Text>
-</TouchableOpacity>
+          onPress={() => {
+            if (router.canGoBack()) {
+              router.back();
+            } else {
+              router.replace("(tabs)"); // fallback to home screen
+              }
+            }}
+            style={styles.headerBtn}
+            >
+              <Text style={styles.headerIcon}>←</Text>
+              </TouchableOpacity>
 
           <Image
             source={require("../assets/licky-fish-logo.jpg")}
