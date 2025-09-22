@@ -93,7 +93,7 @@ const DishDetailScreen = () => {
               </TouchableOpacity>
 
           <Image
-            source={require("../assets/licky-fish-logo.jpg")}
+            source={require("../assets/licky-fish-logo.png")}
             style={styles.logo}
           />
           <TouchableOpacity style={styles.headerBtn}>

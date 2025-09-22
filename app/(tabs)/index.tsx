@@ -74,7 +74,7 @@ const HomeScreen: React.FC = () => {
             <Ionicons name="menu" size={28} color="black" />
           </TouchableOpacity>
           <Image
-            source={require("../../assets/licky-fish-logo.jpg")}
+            source={require("../../assets/licky-fish-logo.png")}
             style={styles.logo}
           />
           <TouchableOpacity>
